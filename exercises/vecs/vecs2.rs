@@ -5,7 +5,7 @@
 // Make me pass the test!
 //
 // Execute `rustlings hint vecs2` or use the `hint` watch subcommand for a hint.
-
+ 
 // I AM NOT DONE
 
 fn vec_loop(mut v: Vec<i32>) -> Vec<i32> {
