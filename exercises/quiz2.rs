@@ -18,8 +18,6 @@
 // - The output element is going to be a Vector of strings.
 // No hints this time!
 
-// I AM NOT DONE
-
 pub enum Command {
     Uppercase,
     Trim,
@@ -28,13 +26,20 @@ pub enum Command {
 
 mod my_module {
     use super::Command;
+    use Command::*;
 
-    // TODO: Complete the function signature!
-    pub fn transformer(input: ???) -> ??? {
-        // TODO: Complete the output declaration!
-        let mut output: ??? = vec![];
+    // Semantically, is it better to use &str or String here? I thought String was converted to &str automatically, but that doesn't always appear to be the case
+    pub fn transformer(input: Vec<(&str, Command)>) -> Vec<String> {
+        let mut output = vec![];
         for (string, command) in input.iter() {
-            // TODO: Complete the function body. You can do it!
+            output.push(match *command {
+                Uppercase => string.to_uppercase(),
+                Trim => string.trim().to_string(),
+                Append(times) => {
+                    let repeated = "bar".repeat(times);
+                    format!("{string}{repeated}")
+                }
+            })
         }
         output
     }
@@ -42,21 +47,31 @@ mod my_module {
 
 #[cfg(test)]
 mod tests {
-    // TODO: What do we need to import to have `transformer` in scope?
-    use ???;
+    use super::my_module::transformer;
     use super::Command;
 
     #[test]
     fn it_works() {
         let output = transformer(vec![
-            ("hello".into(), Command::Uppercase),
-            (" all roads lead to rome! ".into(), Command::Trim),
-            ("foo".into(), Command::Append(1)),
-            ("bar".into(), Command::Append(5)),
+            ("hello", Command::Uppercase),
+            (" all roads lead to rome! ", Command::Trim),
+            ("foo", Command::Append(1)),
+            ("bar", Command::Append(5)),
         ]);
         assert_eq!(output[0], "HELLO");
         assert_eq!(output[1], "all roads lead to rome!");
         assert_eq!(output[2], "foobar");
         assert_eq!(output[3], "barbarbarbarbarbar");
+    }
+
+    fn to_string(input: &str) -> String {
+        input.to_string()
+    }
+
+    #[test]
+    fn is_string_coerced_automatically() {
+        let output = to_string("test1");
+        // Apparently not...
+        // let output = to_string("test1".to_string());
     }
 }
