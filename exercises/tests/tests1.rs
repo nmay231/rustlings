@@ -7,12 +7,11 @@
 // pass! Make the test fail!
 // Execute `rustlings hint tests1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 #[cfg(test)]
 mod tests {
     #[test]
+    // I feel like these are less useful if you already have tasks that tell you to edit the tests, but that's okay I guess.
     fn you_can_assert() {
-        assert!();
+        assert!(true);
     }
 }
