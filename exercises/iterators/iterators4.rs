@@ -1,18 +1,9 @@
 // iterators4.rs
 // Execute `rustlings hint iterators4` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 pub fn factorial(num: u64) -> u64 {
-    // Complete this function to return the factorial of num
-    // Do not use:
-    // - return
-    // Try not to use:
-    // - imperative style loops (for, while)
-    // - additional variables
-    // For an extra challenge, don't use:
-    // - recursion
-    // Execute `rustlings hint iterators4` for hints.
+    // While useless, it was kinda fun. Actually, I guess this is compiled to a for-loop anyways, so it is an optimal solution.
+    (1..(num + 1)).into_iter().fold(1, |a, b| a * b)
 }
 
 #[cfg(test)]
