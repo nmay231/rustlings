@@ -1,10 +1,9 @@
 // threads3.rs
 // Execute `rustlings hint threads3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 use std::sync::mpsc;
 use std::sync::Arc;
+use std::sync::Mutex;
 use std::thread;
 use std::time::Duration;
 
@@ -25,23 +24,33 @@ impl Queue {
 }
 
 fn send_tx(q: Queue, tx: mpsc::Sender<u32>) -> () {
-    let qc = Arc::new(q);
-    let qc1 = Arc::clone(&qc);
-    let qc2 = Arc::clone(&qc);
+    let q = Arc::new(q);
+    let qc1 = Arc::clone(&q);
+    let qc2 = Arc::clone(&q);
+
+    let tx = Arc::new(Mutex::new(tx));
+    let tx1 = Arc::clone(&tx);
+    let tx2 = Arc::clone(&tx);
 
     thread::spawn(move || {
         for val in &qc1.first_half {
             println!("sending {:?}", val);
-            tx.send(*val).unwrap();
-            thread::sleep(Duration::from_secs(1));
+            {
+                let tx1 = tx1.lock().unwrap();
+                tx1.send(*val).unwrap();
+            }
+            thread::sleep(Duration::from_millis(200));
         }
     });
 
     thread::spawn(move || {
         for val in &qc2.second_half {
             println!("sending {:?}", val);
-            tx.send(*val).unwrap();
-            thread::sleep(Duration::from_secs(1));
+            {
+                let tx2 = tx2.lock().unwrap();
+                tx2.send(*val).unwrap();
+            }
+            thread::sleep(Duration::from_millis(200));
         }
     });
 }
